@@ -49,7 +49,7 @@ def coverage(ctx, slowtest=True):
 def setup_submodule(forcesubmodule=False):
     """Build treeple using submodules.
 
-    git submodule set-branch -b fix_sample_weight treeple/_lib/sklearn
+    git submodule set-branch -b fix_check_sample treeple/_lib/sklearn
 
     git submodule update --recursive --remote
 
@@ -66,7 +66,7 @@ def setup_submodule(forcesubmodule=False):
     submodule = "./treeple/_lib/sklearn_fork"
     commit = ""
     current_hash = ""
-    submodule_branch = "fix_sample_weight"
+    submodule_branch = "fix_check_sample"
 
     # if the forked folder does not exist, we will need to force update the submodule
     if not os.path.exists("./treeple/_lib/sklearn/") or forcesubmodule:
