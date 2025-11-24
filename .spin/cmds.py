@@ -66,6 +66,7 @@ def setup_submodule(forcesubmodule=False):
     submodule = "./treeple/_lib/sklearn_fork"
     commit = ""
     current_hash = ""
+    submodule_branch = "fix_sample_weight"
 
     # if the forked folder does not exist, we will need to force update the submodule
     if not os.path.exists("./treeple/_lib/sklearn/") or forcesubmodule:
@@ -82,6 +83,8 @@ def setup_submodule(forcesubmodule=False):
                 "--force",
             ]
         )
+    util.run(["git", "-C", submodule, "fetch", "origin", submodule_branch])
+    util.run(["git", "-C", submodule, "checkout", submodule_branch])
 
     # get the commit hash if the commmit file exists
     if os.path.exists(commit_fpath):
