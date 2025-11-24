@@ -49,7 +49,7 @@ def coverage(ctx, slowtest=True):
 def setup_submodule(forcesubmodule=False):
     """Build treeple using submodules.
 
-    git submodule set-branch -b submodulev3 treeple/_lib/sklearn
+    git submodule set-branch -b fix_sample_weight treeple/_lib/sklearn
 
     git submodule update --recursive --remote
 
