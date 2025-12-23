@@ -25,7 +25,7 @@ jobs:
 
     strategy:
       # Ensure that a wheel builder finishes even if another fails
-      fail-fast: false
+      fail-fast: true
       matrix:
         os:  # see scipy wheels.yml GH actions
           - [ubuntu-22.04, manylinux, x86_64]
@@ -36,8 +36,6 @@ jobs:
         # python[0] is used to specify the python versions made by cibuildwheel
         python:
           [
-            ["cp39", "3.9"],
-            ["cp310", "3.10"],
             ["cp311", "3.11"],
             ["cp312", "3.12"],
           ]
@@ -51,7 +49,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Setup submodule
         run: |
@@ -92,13 +90,11 @@ jobs:
 
     strategy:
       # Ensure that a wheel builder finishes even if another fails
-      fail-fast: false
+      fail-fast: true
       matrix:
         # python[0] is used to specify the python versions made by cibuildwheel
         python:
           [
-            ["cp39", "3.9"],
-            ["cp310", "3.10"],
             ["cp311", "3.11"],
             ["cp312", "3.12"],
           ]
@@ -110,7 +106,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"  # Replace with the desired Python version
+          python-version: "3.11"
 
       - name: Install cibuildwheel dependencies
         run: |
@@ -142,7 +138,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Build source distribution
         run: |
