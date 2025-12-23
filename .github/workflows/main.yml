@@ -25,7 +25,7 @@ jobs:
     name: Meson ${{ matrix.os }} - py${{ matrix.python-version }}
     timeout-minutes: 20
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         python-version: ["3.11", "3.12"]
         os:
@@ -142,7 +142,7 @@ jobs:
     timeout-minutes: 20
     needs: [build_and_test]
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         os: [ubuntu-22.04]
         python-version: ["3.11"]

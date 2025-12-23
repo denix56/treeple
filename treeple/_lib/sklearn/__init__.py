@@ -8,6 +8,9 @@ continue to function.
 import importlib
 import sys
 
+from sklearn.base import BaseEstimator
+from sklearn.utils._tags import Tags
+
 _SKLEARN_TREE = importlib.import_module("sklearn.tree")
 _SKLEARN_TREE_CLASSES = importlib.import_module("sklearn.tree._classes")
 _SKLEARN_TREE_TREE = importlib.import_module("sklearn.tree._tree")
@@ -15,6 +18,25 @@ _SKLEARN_TREE_CRITERION = importlib.import_module("sklearn.tree._criterion")
 _SKLEARN_TREE_UTILS = importlib.import_module("sklearn.tree._utils")
 _SKLEARN_ENSEMBLE = importlib.import_module("sklearn.ensemble")
 _SKLEARN_ENSEMBLE_FOREST = importlib.import_module("sklearn.ensemble._forest")
+
+# Modern scikit-learn removed the legacy ``_xfail_checks`` tag attribute that the
+# vendored fork still tries to populate. Allow the attribute to be set on the
+# slotted ``Tags`` object and ensure the base implementation always provides it
+# so downstream ``__sklearn_tags__`` overrides remain compatible.
+if "_xfail_checks" not in Tags.__slots__:
+    Tags.__slots__ = (*Tags.__slots__, "_xfail_checks")
+
+_ORIGINAL_BASE_TAGS = BaseEstimator.__sklearn_tags__
+
+
+def _compat_tags(self):
+    tags = _ORIGINAL_BASE_TAGS(self)
+    if not hasattr(tags, "_xfail_checks"):
+        tags._xfail_checks = {}
+    return tags
+
+
+BaseEstimator.__sklearn_tags__ = _compat_tags
 
 # Provide legacy attribute aliases expected by the vendored fork.
 if not hasattr(_SKLEARN_TREE_CRITERION, "BaseCriterion"):

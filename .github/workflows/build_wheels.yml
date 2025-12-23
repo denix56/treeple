@@ -25,7 +25,7 @@ jobs:
 
     strategy:
       # Ensure that a wheel builder finishes even if another fails
-      fail-fast: false
+      fail-fast: true
       matrix:
         os:  # see scipy wheels.yml GH actions
           - [ubuntu-22.04, manylinux, x86_64]
@@ -90,7 +90,7 @@ jobs:
 
     strategy:
       # Ensure that a wheel builder finishes even if another fails
-      fail-fast: false
+      fail-fast: true
       matrix:
         # python[0] is used to specify the python versions made by cibuildwheel
         python:
