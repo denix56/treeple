@@ -6,10 +6,12 @@ In environments where the fork is unavailable, we fall back to the installed
 continue to function.
 """
 import importlib
+import inspect
 import sys
 
 from sklearn.base import BaseEstimator
 from sklearn.utils._tags import Tags
+from sklearn.utils import validation as _validation
 
 _SKLEARN_TREE = importlib.import_module("sklearn.tree")
 _SKLEARN_TREE_CLASSES = importlib.import_module("sklearn.tree._classes")
@@ -37,6 +39,29 @@ def _compat_tags(self):
 
 
 BaseEstimator.__sklearn_tags__ = _compat_tags
+
+
+_ORIGINAL_CHECK_X_Y = _validation.check_X_y
+_CHECK_X_Y_SIGNATURE = inspect.signature(_ORIGINAL_CHECK_X_Y)
+_CHECK_X_Y_ACCEPTS_VAR_KWARGS = any(
+    parameter.kind is inspect.Parameter.VAR_KEYWORD
+    for parameter in _CHECK_X_Y_SIGNATURE.parameters.values()
+)
+
+
+def _compat_check_X_y(X, y, *args, **kwargs):
+    """Call ``check_X_y`` while discarding unsupported keyword arguments."""
+
+    if _CHECK_X_Y_ACCEPTS_VAR_KWARGS:
+        return _ORIGINAL_CHECK_X_Y(X, y, *args, **kwargs)
+
+    filtered_kwargs = {
+        key: value for key, value in kwargs.items() if key in _CHECK_X_Y_SIGNATURE.parameters
+    }
+    return _ORIGINAL_CHECK_X_Y(X, y, *args, **filtered_kwargs)
+
+
+_validation.check_X_y = _compat_check_X_y
 
 # Provide legacy attribute aliases expected by the vendored fork.
 if not hasattr(_SKLEARN_TREE_CRITERION, "BaseCriterion"):
