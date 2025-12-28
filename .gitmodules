@@ -1,4 +1,4 @@
 [submodule "treeple/_lib/sklearn"]
 	path = treeple/_lib/sklearn_fork
-	url = https://github.com/neurodata/scikit-learn
-	branch = fix_check_sample
+	url = https://github.com/denix56/scikit-learn.git
+	branch = submodulev3
