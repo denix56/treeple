@@ -6,7 +6,9 @@ Corresponding Email: haoyinxu@gmail.com
 # import the necessary packages
 import numpy as np
 from joblib import Parallel, delayed
+from sklearn.base import BaseEstimator
 from sklearn.metrics import accuracy_score
+from sklearn.utils._tags import ClassifierTags
 from sklearn.utils.multiclass import _check_partial_fit_first_call
 
 from .._lib.sklearn.ensemble._forest import (
@@ -82,6 +84,25 @@ class StreamDecisionForest(RandomForestClassifier):
     n_batches_ : int
         The number of batches seen with `partial_fit`.
     """
+
+    def __sklearn_tags__(self):
+        """Return estimator tags compatible with modern scikit-learn.
+
+        The vendored :class:`RandomForestClassifier` defines ``__sklearn_tags__``
+        using an older ``Tags`` API that is incompatible with scikit-learn
+        1.8's slotted ``Tags`` class. Bypass the parent implementation and build
+        the minimal set of tags expected for a classifier directly from
+        :class:`~sklearn.base.BaseEstimator`'s defaults.
+        """
+
+        tags = BaseEstimator.__sklearn_tags__(self)
+        tags.estimator_type = "classifier"
+        tags.target_tags.required = True
+        tags.target_tags.single_output = False
+        tags.target_tags.multi_output = True
+        tags.classifier_tags = ClassifierTags(multi_label=True)
+        tags.input_tags.sparse = True
+        return tags
 
     def __init__(
         self,

@@ -589,6 +589,13 @@ class HonestTreeClassifier(MetaEstimatorMixin, ClassifierMixin, BaseDecisionTree
         if check_input:
             X, y = check_X_y(X, y, multi_output=True)
 
+        check_classification_targets(y)
+
+        if sample_weight is not None and len(sample_weight) != len(y):
+            raise ValueError(
+                "sample_weight length must match number of samples in y"
+            )
+
         self.estimator_ = self._get_estimator()
 
         # check that all of tree_estimator_params are valid
