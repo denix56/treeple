@@ -66,7 +66,7 @@ def setup_submodule(forcesubmodule=False):
     submodule = "./treeple/_lib/sklearn_fork"
     commit = ""
     current_hash = ""
-    submodule_branch = "submodulev3"
+    submodule_branch = "integrate-upstream"
 
     # if the forked folder does not exist, we will need to force update the submodule
     if not os.path.exists("./treeple/_lib/sklearn/") or forcesubmodule:
